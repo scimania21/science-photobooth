@@ -5,32 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>제27회 인천과학대제전 과학네컷</title>
     <style>
-        body{font-family:'Malgun Gothic',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;background-color:#f0f2f5;color:#333} /* [cite: 2, 3] */
-        .screen{display:none;width:100%;max-width:1000px;padding:20px;box-sizing:border-box;text-align:center} /* [cite: 3, 4] */
-        .screen.active{display:block} /* [cite: 4, 5] */
-        h1,h2{color:#2c3e50} /* [cite: 5, 6] */
-        button{background-color:#3498db;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:16px;cursor:pointer;transition:background-color .3s;margin:5px} /* [cite: 6, 7, 8] */
-        button:hover{background-color:#2980b9} /* [cite: 8] */
-        button:disabled{background-color:#bdc3c7;cursor:not-allowed} /* [cite: 9, 10] */
-        #frame-selection .frame-options{display:flex;flex-direction:column;align-items:center;gap:20px} /* [cite: 10, 11] */
-        #frame-selection .frame-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap} /* [cite: 11, 12] */
-        #frame-selection img{box-sizing:border-box;width:200px;border:3px solid transparent;border-radius:10px;cursor:pointer;transition:border-color .3s,transform .3s;background-color:#fff} /* [cite: 12, 13, 14] */
-        #frame-selection img:hover{border-color:#3498db;transform:scale(1.05)} /* [cite: 14] */ /* 독도네컷의 d30026 대신 원래 색상 유지 */
-        #video-container{position:relative;width:100%;max-width:500px;margin:0 auto} /* [cite: 15, 16] */
-        #capture-screen video{width:100%;border-radius:10px;background-color:#000;display:block;transform:scaleX(-1)} /* [cite: 16, 17] */
-        #countdown-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:none;justify-content:center;align-items:center;font-size:150px;font-weight:700;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,.8);-webkit-text-stroke:2px #000} /* [cite: 18, 19] */
-        #capture-controls{margin-top:15px} /* [cite: 19, 20] */
-        #stop-capture-btn{background-color:#e74c3c} /* [cite: 20, 21] */
-        #thumbnails{display:flex;flex-wrap:nowrap;gap:10px;justify-content:flex-start;margin-top:15px;height:80px;overflow-y:hidden;overflow-x:auto;padding:10px;background:#fff;border-radius:5px} /* [cite: 21, 22, 23] */
-        #thumbnails img{width:80px;height:60px;object-fit:cover;border-radius:5px;flex-shrink:0} /* [cite: 23, 24] */
-        #photo-selection .photo-grid{display:grid;grid-template-columns:repeat(5, 1fr);gap:15px;margin:20px 0} /* [cite: 24, 25] */
-        #photo-selection .photo-item img{width:100%;border-radius:5px;display:block;border:4px solid transparent;cursor:pointer;transition:border-color .2s} /* [cite: 25, 26, 27] */
-        #photo-selection .photo-item img.selected{border-color:#3498db} /* [cite: 27, 28] */ /* 독도네컷의 0047a0 대신 원래 색상 유지 */
-        #editor-screen canvas{border:2px solid #ccc;border-radius:5px;cursor:grab;max-width:100%;height:auto;touch-action:none} /* [cite: 28, 29] */
-        .instructions{background-color:#eaf5ff;border:1px solid #bce8f1;color:#31708f;padding:15px;border-radius:8px;margin-bottom:20px} /* [cite: 29, 30, 31] */ /* 독도네컷 색상 대신 원래 색상 유지 */
-        .footer{margin-top:40px;font-size:14px;color:#888} /* [cite: 31, 32] */
-        #camera-controls{margin-bottom:10px} /* [cite: 32, 33] */
-        #camera-select{padding:8px;border-radius:5px;border:1px solid #ccc;font-size:14px} /* [cite: 33, 34] */
+        body{font-family:'Malgun Gothic',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;background-color:#f0f2f5;color:#333}
+        .screen{display:none;width:100%;max-width:1000px;padding:20px;box-sizing:border-box;text-align:center}
+        .screen.active{display:block}
+        h1,h2{color:#2c3e50}
+        button{background-color:#3498db;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:16px;cursor:pointer;transition:background-color .3s;margin:5px}
+        button:hover{background-color:#2980b9}
+        button:disabled{background-color:#bdc3c7;cursor:not-allowed}
+        #frame-selection .frame-options{display:flex;flex-direction:column;align-items:center;gap:20px}
+        #frame-selection .frame-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+        #frame-selection img{box-sizing:border-box;width:200px;border:3px solid transparent;border-radius:10px;cursor:pointer;transition:border-color .3s,transform .3s;background-color:#fff}
+        #frame-selection img:hover{border-color:#3498db;transform:scale(1.05)}
+        #video-container{position:relative;width:100%;max-width:500px;margin:0 auto}
+        #capture-screen video{width:100%;border-radius:10px;background-color:#000;display:block;transform:scaleX(-1)}
+        #countdown-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:none;justify-content:center;align-items:center;font-size:150px;font-weight:700;color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,.8);-webkit-text-stroke:2px #000}
+        #capture-controls{margin-top:15px}
+        #stop-capture-btn{background-color:#e74c3c}
+        #thumbnails{display:flex;flex-wrap:nowrap;gap:10px;justify-content:flex-start;margin-top:15px;height:80px;overflow-y:hidden;overflow-x:auto;padding:10px;background:#fff;border-radius:5px}
+        #thumbnails img{width:80px;height:60px;object-fit:cover;border-radius:5px;flex-shrink:0}
+        #photo-selection .photo-grid{display:grid;grid-template-columns:repeat(5, 1fr);gap:15px;margin:20px 0}
+        #photo-selection .photo-item img{width:100%;border-radius:5px;display:block;border:4px solid transparent;cursor:pointer;transition:border-color .2s}
+        #photo-selection .photo-item img.selected{border-color:#3498db}
+        #editor-screen canvas{border:2px solid #ccc;border-radius:5px;cursor:grab;max-width:100%;height:auto;touch-action:none}
+        .instructions{background-color:#eaf5ff;border:1px solid #bce8f1;color:#31708f;padding:15px;border-radius:8px;margin-bottom:20px}
+        .footer{margin-top:40px;font-size:14px;color:#888}
+        #camera-controls{margin-bottom:10px}
+        #camera-select{padding:8px;border-radius:5px;border:1px solid #ccc;font-size:14px}
     </style>
 </head>
 <body>
@@ -52,11 +52,11 @@
                 <img src="8번 프레임.png" alt="프레임 8" data-frame="8번 프레임.png" data-photos="4" data-photo-slots="frame_08_slots">
             </div>
         </div>
-        <p class="footer">제작: 인천신정초등학교 김병석 선생님 (scimania@daum.net)</p> /* [cite: 37] */
+        <p class="footer">제작: 인천신정초등학교 김병석 선생님 (scimania@daum.net)</p>
     </div>
     <div id="capture-screen" class="screen">
         <h2>📷 사진 촬영 (<span id="capture-count">0</span>/10)</h2>
-        <p class="instructions">원하는 촬영 방식을 선택하세요. 최대 10장까지 촬영할 수 있습니다.</p> /* [cite: 38] */
+        <p class="instructions">원하는 촬영 방식을 선택하세요. 최대 10장까지 촬영할 수 있습니다.</p>
         <div id="camera-controls">
             <label for="camera-select">카메라 선택: </label>
             <select id="camera-select"></select>
@@ -64,7 +64,7 @@
         <div id="video-container">
             <video id="webcam" autoplay playsinline></video>
             <div id="countdown-overlay"></div>
-        </div> /* [cite: 39] */
+        </div>
         <div id="capture-controls">
             <button id="manual-capture-btn">수동촬영</button>
             <button id="auto-capture-1s-btn">1초 자동촬영</button>
@@ -72,7 +72,7 @@
             <button id="auto-capture-5s-btn">5초 자동촬영</button>
             <button id="stop-capture-btn" style="display:none">촬영 중지</button>
         </div>
-        <button id="next-to-selection-btn" disabled>사진 선택하기</button> /* [cite: 40] */
+        <button id="next-to-selection-btn" disabled>사진 선택하기</button>
         <h3>촬영된 사진 목록</h3>
         <div id="thumbnails"></div>
     </div>
@@ -84,7 +84,7 @@
     </div>
     <div id="editor-screen" class="screen">
         <h2>🎨 사진 편집</h2>
-        <p class="instructions">사진을 드래그하여 위치를 옮기고, 모서리 핸들이나 단축키(W/A/S/D)로 크기와 방향을 조절하세요.</p> /* [cite: 41] */
+        <p class="instructions">사진을 드래그하여 위치를 옮기고, 모서리 핸들이나 단축키(W/A/S/D)로 크기와 방향을 조절하세요.</p>
         <canvas id="canvas"></canvas>
         <div class="controls" style="margin-top:20px">
             <button id="download-btn">이미지 다운로드</button>
@@ -93,104 +93,99 @@
         </div>
     </div>
 
-    <audio id="shutter-sound" src="shutter.mp3" preload="auto"></audio> /* [cite: 41] */
+    <audio id="shutter-sound" src="https://www.soundjay.com/mechanical/camera-shutter-click-01.wav" preload="auto"></audio>
 
     <script>
-        const screens=document.querySelectorAll(".screen"),frameSelectionScreen=document.getElementById("frame-selection"),captureScreen=document.getElementById("capture-screen"),photoSelectionScreen=document.getElementById("photo-selection"),editorScreen=document.getElementById("editor-screen"),webcamElement=document.getElementById("webcam"),canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d"),captureCountSpan=document.getElementById("capture-count"),manualCaptureBtn=document.getElementById("manual-capture-btn"),autoCapture1sBtn=document.getElementById("auto-capture-1s-btn"),autoCapture3sBtn=document.getElementById("auto-capture-3s-btn"),autoCapture5sBtn=document.getElementById("auto-capture-5s-btn"),stopCaptureBtn=document.getElementById("stop-capture-btn"),countdownOverlay=document.getElementById("countdown-overlay"),thumbnailsContainer=document.getElementById("thumbnails"),nextToSelectionBtn=document.getElementById("next-to-selection-btn"),photoGridContainer=document.getElementById("photo-grid-container"),requiredPhotosCountSpan=document.getElementById("required-photos-count"),nextToEditorBtn=document.getElementById("next-to-editor-btn"),downloadBtn=document.getElementById("download-btn"),printBtn=document.getElementById("print-btn"),restartBtn=document.getElementById("restart-btn"),shutterSound=document.getElementById("shutter-sound"),cameraSelect=document.getElementById("camera-select"); /* [cite: 42, 43, 44, 45, 46, 47] */
-        let state={selectedFrameSrc:null,selectedFrameType:null,requiredPhotos:0,capturedPhotos:[],editedPhotos:[],frameImage:null},activePhoto=null,isDragging=!1,isResizing=!1,isRotating=!1,dragStartX,dragStartY; /* [cite: 48, 49] */
-        const handleSize=16; /* [cite: 50] */
-        let autoCaptureTimer=null,countdownInterval=null; /* [cite: 50] */
-        const frameSlots={frame_01_slots:[[.07,.3614,.2795,.2093],[.3678,.3553,.2611,.2037],[.6543,.3688,.2634,.1981],[.0883,.6542,.266,.1958],[.3715,.669,.2529,.2024],[.6495,.6489,.272,.2013]],frame_02_slots:[[.0688,.0476,.8552,.7056]],frame_03_slots:[[.0576,.2894,.6884,.4677]],frame_04_slots:[[.2379,.2011,.5365,.4566]],frame_05_slots:[[.0378,.5011,.4613,.4497],[.5024,.5011,.4613,.4497]],frame_06_slots:[[.0239,.4603,.4437,.2312],[.0239,.7169,.4437,.2312],[.5036,.4603,.4437,.2312],[.5036,.7169,.4437,.2312]],frame_07_slots:[[.0239,.4603,.4437,.2312],[.0239,.7169,.4437,.2312],[.5036,.4603,.4437,.2312],[.5036,.7169,.4437,.2312]],frame_08_slots:[[.0284,.1749,.4429,.231],[.0284,.4354,.4429,.231],[.5054,.1749,.4429,.231],[.5054,.4354,.4529,.231]]}; /* [cite: 51, 52, 53, 54, 55] */
-        Object.keys(frameSlots).forEach(e=>{frameSlots[e].forEach(e=>{e.length<5&&e.push("square")})}); /* [cite: 56] */
+        const screens=document.querySelectorAll(".screen"),frameSelectionScreen=document.getElementById("frame-selection"),captureScreen=document.getElementById("capture-screen"),photoSelectionScreen=document.getElementById("photo-selection"),editorScreen=document.getElementById("editor-screen"),webcamElement=document.getElementById("webcam"),canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d"),captureCountSpan=document.getElementById("capture-count"),manualCaptureBtn=document.getElementById("manual-capture-btn"),autoCapture1sBtn=document.getElementById("auto-capture-1s-btn"),autoCapture3sBtn=document.getElementById("auto-capture-3s-btn"),autoCapture5sBtn=document.getElementById("auto-capture-5s-btn"),stopCaptureBtn=document.getElementById("stop-capture-btn"),countdownOverlay=document.getElementById("countdown-overlay"),thumbnailsContainer=document.getElementById("thumbnails"),nextToSelectionBtn=document.getElementById("next-to-selection-btn"),photoGridContainer=document.getElementById("photo-grid-container"),requiredPhotosCountSpan=document.getElementById("required-photos-count"),nextToEditorBtn=document.getElementById("next-to-editor-btn"),downloadBtn=document.getElementById("download-btn"),printBtn=document.getElementById("print-btn"),restartBtn=document.getElementById("restart-btn"),shutterSound=document.getElementById("shutter-sound"),cameraSelect=document.getElementById("camera-select");
+        let state={selectedFrameSrc:null,selectedFrameType:null,requiredPhotos:0,capturedPhotos:[],editedPhotos:[],frameImage:null},activePhoto=null,isDragging=!1,isResizing=!1,isRotating=!1,dragStartX,dragStartY;
+        const handleSize=16;
+        let autoCaptureTimer=null,countdownInterval=null;
+        const frameSlots={frame_01_slots:[[.07,.3614,.2795,.2093],[.3678,.3553,.2611,.2037],[.6543,.3688,.2634,.1981],[.0883,.6542,.266,.1958],[.3715,.669,.2529,.2024],[.6495,.6489,.272,.2013]],frame_02_slots:[[.0688,.0476,.8552,.7056]],frame_03_slots:[[.0576,.2894,.6884,.4677]],frame_04_slots:[[.2379,.2011,.5365,.4566]],frame_05_slots:[[.0378,.5011,.4613,.4497],[.5024,.5011,.4613,.4497]],frame_06_slots:[[.0239,.4603,.4437,.2312],[.0239,.7169,.4437,.2312],[.5036,.4603,.4437,.2312],[.5036,.7169,.4437,.2312]],frame_07_slots:[[.0239,.4603,.4437,.2312],[.0239,.7169,.4437,.2312],[.5036,.4603,.4437,.2312],[.5036,.7169,.4437,.2312]],frame_08_slots:[[.0284,.1749,.4429,.231],[.0284,.4354,.4429,.231],[.5054,.1749,.4429,.231],[.5054,.4354,.4529,.231]]};
+        Object.keys(frameSlots).forEach(e=>{frameSlots[e].forEach(e=>{e.length<5&&e.push("square")})});
         
-        function showScreen(e){screens.forEach(t=>t.classList.remove("active")),document.getElementById(e).classList.add("active")} /* [cite: 57, 58] */
+        function showScreen(e){screens.forEach(t=>t.classList.remove("active")),document.getElementById(e).classList.add("active")}
         
-        // --- ⭐️ 프레임 선택 시 initializeCameraAndList 호출 (독도네컷 참고) ⭐️ ---
         frameSelectionScreen.addEventListener("click",e=>{
             if("IMG"===e.target.tagName){
                 state.selectedFrameSrc=e.target.dataset.frame;
                 state.selectedFrameType=e.target.dataset.photoSlots;
                 state.requiredPhotos=parseInt(e.target.dataset.photos);
-                initializeCameraAndList(); // 변경된 함수 호출 
+                initializeCameraAndList(); 
             }
         });
 
-        // --- ⭐️ 카메라 목록 가져오기 및 초기화 함수 (독도네컷 참고) ⭐️ ---
         async function initializeCameraAndList(){
             try{
-                const initialStream=await navigator.mediaDevices.getUserMedia({video:!0}); /* [cite: 61] */
+                const initialStream=await navigator.mediaDevices.getUserMedia({video:!0}); 
                 webcamElement.srcObject=initialStream;
                 showScreen("capture-screen");
 
-                const devices=await navigator.mediaDevices.enumerateDevices(); /* [cite: 62] */
+                const devices=await navigator.mediaDevices.enumerateDevices(); 
                 const videoDevices=devices.filter(device=>"videoinput"===device.kind);
                 
-                cameraSelect.innerHTML=""; /* [cite: 63] */
-                if(0===videoDevices.length)return void alert("사용 가능한 카메라가 없습니다."); /* [cite: 63, 64] */
+                cameraSelect.innerHTML=""; 
+                if(0===videoDevices.length)return void alert("사용 가능한 카메라가 없습니다."); 
 
-                const currentDeviceInUse=initialStream.getVideoTracks()[0].getSettings().deviceId; /* [cite: 65] */
+                const currentDeviceInUse=initialStream.getVideoTracks()[0].getSettings().deviceId; 
                 videoDevices.forEach((device,index)=>{
                     const option=document.createElement("option");
                     option.value=device.deviceId;
                     option.text=device.label||`카메라 ${index+1}`;
-                    device.deviceId===currentDeviceInUse&&(option.selected=!0); /* [cite: 66] */
+                    device.deviceId===currentDeviceInUse&&(option.selected=!0); 
                     cameraSelect.appendChild(option)
-                }); /* [cite: 65, 66] */
+                }); 
             }catch(err){
-                console.error("웹캠 접근 오류:",err); /* [cite: 67] */
-                alert("웹캠에 접근할 수 없습니다. 카메라 권한을 허용해주세요.\n\n(참고: 이 프로그램은 '서버' 환경에서 실행해야 합니다. 'file://' 경로에서는 작동하지 않습니다.)") /* [cite: 68] */
+                console.error("웹캠 접근 오류:",err); 
+                alert("웹캠에 접근할 수 없습니다. 카메라 권한을 허용해주세요.\n\n(참고: 이 프로그램은 '서버' 환경에서 실행해야 합니다. 'file://' 경로에서는 작동하지 않습니다.)") 
             }
         }
 
-        // --- ⭐️ 특정 deviceId로 웹캠 시작/전환하는 함수 (독도네컷 참고) ⭐️ ---
         async function startWebcam(deviceId){
             try{
-                if(webcamElement.srcObject){webcamElement.srcObject.getTracks().forEach(track=>track.stop())} /* [cite: 70] */
+                if(webcamElement.srcObject){webcamElement.srcObject.getTracks().forEach(track=>track.stop())} 
                 
-                const constraints={video:{deviceId:{exact:deviceId}}}; /* [cite: 71, 72] */
-                const stream=await navigator.mediaDevices.getUserMedia(constraints); /* [cite: 73] */
-                webcamElement.srcObject=stream /* [cite: 74] */
+                const constraints={video:{deviceId:{exact:deviceId}}}; 
+                const stream=await navigator.mediaDevices.getUserMedia(constraints); 
+                webcamElement.srcObject=stream 
             }catch(err){
-                console.error("웹캠 전환 오류:",err); /* [cite: 74] */
-                alert("선택한 카메라를 시작할 수 없습니다.") /* [cite: 75] */
+                console.error("웹캠 전환 오류:",err); 
+                alert("선택한 카메라를 시작할 수 없습니다.") 
             }
         }
 
-        // --- ⭐️ 카메라 선택 드롭다운 이벤트 리스너 (독도네컷 참고) ⭐️ ---
-        cameraSelect.addEventListener("change",()=>{startWebcam(cameraSelect.value)}); /*  */
+        cameraSelect.addEventListener("change",()=>{startWebcam(cameraSelect.value)}); 
 
-        function capturePhoto(){if(!(state.capturedPhotos.length>=10)){shutterSound.currentTime=0,shutterSound.play();const e=document.createElement("canvas");e.width=webcamElement.videoWidth,e.height=webcamElement.videoHeight;const t=e.getContext("2d");t.drawImage(webcamElement,0,0,e.width,e.height);const a=e.toDataURL("image/jpeg");state.capturedPhotos.push(a);const o=document.createElement("img");o.src=a,thumbnailsContainer.appendChild(o),captureCountSpan.textContent=state.capturedPhotos.length,state.capturedPhotos.length>=10&&(toggleCaptureButtons(!0),stopAutoCapture(),nextToSelectionBtn.disabled=!1)}} /* [cite: 76, 77, 80, 81, 82] */
-        function runCountdown(e,t){let a=e;countdownOverlay.style.display="flex";const o=()=>{countdownOverlay.textContent=a,a<1?(clearInterval(countdownInterval),countdownOverlay.style.display="none",t()):a--};o(),countdownInterval=setInterval(o,1e3)} /* [cite: 82, 83, 84, 85, 86] */
-        function startAutoCapture(e){if(state.capturedPhotos.length>=10)return;toggleCaptureButtons(!0),stopCaptureBtn.style.display="inline-block";const t=()=>{state.capturedPhotos.length>=10?stopAutoCapture():runCountdown(e,()=>{capturePhoto(),state.capturedPhotos.length<10&&(autoCaptureTimer=setTimeout(t,1e3))})};t()} /* [cite: 86, 87, 88, 89, 90] */
-        function stopAutoCapture(){clearTimeout(autoCaptureTimer),clearInterval(countdownInterval),autoCaptureTimer=null,countdownInterval=null,countdownOverlay.style.display="none",stopCaptureBtn.style.display="none",toggleCaptureButtons(state.capturedPhotos.length>=10)} /* [cite: 90, 91, 92] */
-        function toggleCaptureButtons(e){manualCaptureBtn.disabled=e,autoCapture1sBtn.disabled=e,autoCapture3sBtn.disabled=e,autoCapture5sBtn.disabled=e} /* [cite: 92, 93] */
-        manualCaptureBtn.addEventListener("click",capturePhoto),autoCapture1sBtn.addEventListener("click",()=>startAutoCapture(1)),autoCapture3sBtn.addEventListener("click",()=>startAutoCapture(3)),autoCapture5sBtn.addEventListener("click",()=>startAutoCapture(5)),stopCaptureBtn.addEventListener("click",stopAutoCapture); /* [cite: 93, 94] */
+        function capturePhoto(){if(!(state.capturedPhotos.length>=10)){shutterSound.currentTime=0,shutterSound.play();const e=document.createElement("canvas");e.width=webcamElement.videoWidth,e.height=webcamElement.videoHeight;const t=e.getContext("2d");t.drawImage(webcamElement,0,0,e.width,e.height);const a=e.toDataURL("image/jpeg");state.capturedPhotos.push(a);const o=document.createElement("img");o.src=a,thumbnailsContainer.appendChild(o),captureCountSpan.textContent=state.capturedPhotos.length,state.capturedPhotos.length>=10&&(toggleCaptureButtons(!0),stopAutoCapture(),nextToSelectionBtn.disabled=!1)}} 
+        function runCountdown(e,t){let a=e;countdownOverlay.style.display="flex";const o=()=>{countdownOverlay.textContent=a,a<1?(clearInterval(countdownInterval),countdownOverlay.style.display="none",t()):a--};o(),countdownInterval=setInterval(o,1e3)} 
+        function startAutoCapture(e){if(state.capturedPhotos.length>=10)return;toggleCaptureButtons(!0),stopCaptureBtn.style.display="inline-block";const t=()=>{state.capturedPhotos.length>=10?stopAutoCapture():runCountdown(e,()=>{capturePhoto(),state.capturedPhotos.length<10&&(autoCaptureTimer=setTimeout(t,1e3))})};t()} 
+        function stopAutoCapture(){clearTimeout(autoCaptureTimer),clearInterval(countdownInterval),autoCaptureTimer=null,countdownInterval=null,countdownOverlay.style.display="none",stopCaptureBtn.style.display="none",toggleCaptureButtons(state.capturedPhotos.length>=10)} 
+        function toggleCaptureButtons(e){manualCaptureBtn.disabled=e,autoCapture1sBtn.disabled=e,autoCapture3sBtn.disabled=e,autoCapture5sBtn.disabled=e} 
+        manualCaptureBtn.addEventListener("click",capturePhoto),autoCapture1sBtn.addEventListener("click",()=>startAutoCapture(1)),autoCapture3sBtn.addEventListener("click",()=>startAutoCapture(3)),autoCapture5sBtn.addEventListener("click",()=>startAutoCapture(5)),stopCaptureBtn.addEventListener("click",stopAutoCapture); 
         
-        // --- ⭐️ '사진 선택하기' 클릭 시 스트림 중지 확인 (독도네컷 참고) ⭐️ ---
         nextToSelectionBtn.addEventListener("click",()=>{
             stopAutoCapture();
-            if(webcamElement.srcObject){webcamElement.srcObject.getTracks().forEach(track=>track.stop());webcamElement.srcObject=null} /* [cite: 95, 96] */
+            if(webcamElement.srcObject){webcamElement.srcObject.getTracks().forEach(track=>track.stop());webcamElement.srcObject=null} 
             setupPhotoSelection()
-        }); /* [cite: 95, 96] */
+        }); 
         
-        function setupPhotoSelection(){photoGridContainer.innerHTML="",requiredPhotosCountSpan.textContent=state.requiredPhotos,state.capturedPhotos.forEach((e,t)=>{const a=document.createElement("div");a.className="photo-item";const o=document.createElement("img");o.src=e,o.dataset.index=t,a.appendChild(o),photoGridContainer.appendChild(a)}),showScreen("photo-selection")} /* [cite: 97, 98, 99, 100] */
-        photoGridContainer.addEventListener("click",e=>{"IMG"===e.target.tagName&&(!e.target.classList.contains("selected")&&photoGridContainer.querySelectorAll("img.selected").length>=state.requiredPhotos?alert(`사진은 ${state.requiredPhotos}장까지만 선택할 수 있습니다.`):e.target.classList.toggle("selected"))}); /* [cite: 100, 101] */
-        nextToEditorBtn.addEventListener("click",()=>{const e=photoGridContainer.querySelectorAll("img.selected");if(e.length!==state.requiredPhotos)return void alert(`정확히 ${state.requiredPhotos}장의 사진을 선택해야 합니다.`);const t=Array.from(e).map(e=>state.capturedPhotos[e.dataset.index]);initEditor(t)}); /* [cite: 102, 103] */
-        function initEditor(e){const t=new Image;state.frameImage=t,t.src=state.selectedFrameSrc,t.onload=()=>{canvas.width=t.width,canvas.height=t.height;const a=e.map(e=>new Promise(t=>{const a=new Image;a.src=e,a.onload=()=>t(a)}));Promise.all(a).then(e=>{state.editedPhotos=e.map((e,t)=>{const a=frameSlots[state.selectedFrameType][t],o=a[0]*canvas.width,n=a[1]*canvas.height,i=a[2]*canvas.width,c=a[3]*canvas.height,r=a[4];let d=0,s=0;i>c?(d=i,s=i*(e.height/e.width),s<c&&(s=c,d=c*(e.width/e.height))):(s=c,d=c*(e.width/e.height),d<i&&(d=i,s=i*(e.height/e.width)));let l=0;if("frame_01_slots"===state.selectedFrameType)switch(t){case 0:l=-10*(Math.PI/180);break;case 2:l=5*(Math.PI/180);break;case 3:l=3*(Math.PI/180);break;case 5:l=-8*(Math.PI/180)}return{img:e,x:o+(i-d)/2,y:n+(c-s)/2,width:d,height:s,rotation:l,originalSlot:{x:o,y:n,width:i,height:c,type:r}}}),drawCanvas(),showScreen("editor-screen")})},t.complete&&t.onload()} /* [cite: 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119] */
-        function drawCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height),state.editedPhotos.forEach(e=>{ctx.save();const t=e.originalSlot;"circle"===t.type?(ctx.beginPath(),ctx.arc(t.x+t.width/2,t.y+t.height/2,Math.min(t.width,t.height)/2,0,2*Math.PI),ctx.closePath(),ctx.clip()):(ctx.beginPath(),ctx.rect(t.x,t.y,t.width,t.height),ctx.closePath(),ctx.clip()),ctx.translate(e.x+e.width/2,e.y+e.height/2),ctx.rotate(e.rotation),ctx.translate(-(e.x+e.width/2),-(e.y+e.height/2)),ctx.drawImage(e.img,e.x,e.y,e.width,e.height),ctx.restore()}),state.frameImage&&state.frameImage.complete&&ctx.drawImage(state.frameImage,0,0,canvas.width,canvas.height),activePhoto&&drawHandles(activePhoto)} /* [cite: 119, 120, 121, 122, 123, 124, 125, 126] */
-        function drawHandles(e){const t=e.x+e.width/2,a=e.y+e.height/2;ctx.save(),ctx.translate(t,a),ctx.rotate(e.rotation),ctx.strokeStyle="#0047a0",ctx.lineWidth=4,ctx.strokeRect(-e.width/2,-e.height/2,e.width,e.height),ctx.fillStyle="#0047a0",ctx.fillRect(e.width/2-handleSize,e.height/2-handleSize,2*handleSize,2*handleSize),ctx.fillStyle="#e74c3c",ctx.beginPath(),ctx.arc(-e.width/2,-e.height/2,handleSize,0,2*Math.PI),ctx.fill(),ctx.restore()} /* [cite: 126, 127, 128, 129, 130, 131, 132] */
-        function getPointerPos(e){const t=canvas.getBoundingClientRect(),a=canvas.width/t.width,o=canvas.height/t.height,n=e.clientX||e.touches[0].clientX,i=e.clientY||e.touches[0].clientY;return{x:(n-t.left)*a,y:(i-t.top)*o}} /* [cite: 132, 133, 134, 135] */
-        function getTransformedCoords(e,t){const a=e.x-(t.x+t.width/2),o=e.y-(t.y+t.height/2),n=-t.rotation;return{x:a*Math.cos(n)-o*Math.sin(n)+t.x+t.width/2,y:a*Math.sin(n)+o*Math.cos(n)+t.y+t.height/2}} /* [cite: 135, 136, 137, 138, 139] */
-        function isOverHandle(e,t,a){const o=2*handleSize;return"resize"===a?t.x>e.x+e.width-o&&t.x<e.x+e.width&&t.y>e.y+e.height-o&&t.y<e.y+e.height:"rotate"===a?t.x>e.x&&t.x<e.x+o&&t.y>e.y&&t.y<e.y+o:void 0} /* [cite: 139, 140, 141, 142] */
-        function handlePointerDown(e){e.preventDefault();const t=getPointerPos(e);if(activePhoto){const a=getTransformedCoords(t,activePhoto);if(isOverHandle(activePhoto,a,"resize"))return isResizing=!0,void(canvas.style.cursor="se-resize");if(isOverHandle(activePhoto,a,"rotate"))return isRotating=!0,void(canvas.style.cursor="crosshair")}activePhoto=null,isDragging=!1,isResizing=!1,isRotating=!1;for(let a=state.editedPhotos.length-1;a>=0;a--){const o=state.editedPhotos[a],n=getTransformedCoords(t,o);if(n.x>=o.x&&n.x<=o.x+o.width&&n.y>=o.y&&n.y<=o.y+o.height){activePhoto=o,isDragging=!0,dragStartX=t.x-o.x,dragStartY=t.y-o.y,canvas.style.cursor="grabbing",state.editedPhotos.splice(a,1),state.editedPhotos.push(o);break}}drawCanvas()} /* [cite: 142, 143, 144, 145, 146, 147, 148, 149, 150, 151] */
-        function handlePointerMove(e){if(!activePhoto)return;e.preventDefault();const t=getPointerPos(e);if(isDragging)activePhoto.x=t.x-dragStartX,activePhoto.y=t.y-dragStartY;else if(isResizing){const a=getTransformedCoords(t,activePhoto),o=a.x-activePhoto.x,n=o*(activePhoto.img.height/activePhoto.img.width);o>20&&(activePhoto.width=o,activePhoto.height=n)}else if(isRotating){const a=activePhoto.x+activePhoto.width/2,o=activePhoto.y+activePhoto.height/2;activePhoto.rotation=Math.atan2(t.y-o,t.x-a)}drawCanvas()} /* [cite: 151, 152, 153, 154, 155, 156, 157, 158, 159] */
-        function handlePointerUp(e){isDragging=!1,isResizing=!1,isRotating=!1,canvas.style.cursor="grab"} /* [cite: 159, 160] */
-        document.addEventListener("keydown",e=>{if(!activePhoto)return;if("INPUT"===e.target.tagName||"TEXTAREA"===e.target.tagName)return;const t=1.05,a=Math.PI/180*5;let o=!0;switch(e.key.toLowerCase()){case"w":activePhoto.width*=t,activePhoto.height*=t;break;case"s":activePhoto.width/=t,activePhoto.height/=t;break;case"a":activePhoto.rotation-=a;break;case"d":activePhoto.rotation+=a;break;default:o=!1}o&&(e.preventDefault(),drawCanvas())}); /* [cite: 161, 162, 163, 164, 165] */
-        canvas.addEventListener("mousedown",handlePointerDown),canvas.addEventListener("mousemove",handlePointerMove),canvas.addEventListener("mouseup",handlePointerUp),canvas.addEventListener("mouseleave",handlePointerUp),canvas.addEventListener("touchstart",handlePointerDown,{passive:!1}),canvas.addEventListener("touchmove",handlePointerMove,{passive:!1}),canvas.addEventListener("touchend",handlePointerUp),canvas.addEventListener("touchcancel",handlePointerUp); /* [cite: 165, 166] */
-        downloadBtn.addEventListener("click",()=>{activePhoto=null,drawCanvas();const e=new Date,t=""+e.getFullYear()+(e.getMonth()+1).toString().padStart(2,"0")+e.getDate().toString().padStart(2,"0")+"_"+e.getHours().toString().padStart(2,"0")+e.getMinutes().toString().padStart(2,"0")+e.getSeconds().toString().padStart(2,"0"),a=document.createElement("a");a.download=`${t}.png`,a.href=canvas.toDataURL("image/png"),document.body.appendChild(a),a.click(),document.body.removeChild(a)}); /* [cite: 167, 168, 169, 170] */
-        printBtn.addEventListener("click",()=>{activePhoto=null,drawCanvas();const e=canvas.toDataURL("image/png"),t=window.open("","","width=800,height=600");t.document.open(),t.document.write(`\n                <!DOCTYPE html>\n                <html>\n                <head><title>Print</title></head>\n                <body onload="window.print(); window.close()">\n                    <img src="${e}" style="max-width: 100%;">\n                </body>\n                </html>\n            `),t.document.close()}); /* [cite: 171, 172, 173] */
-        restartBtn.addEventListener("click",()=>{stopAutoCapture(),webcamElement.srcObject&&(webcamElement.srcObject.getTracks().forEach(e=>e.stop()),webcamElement.srcObject=null),state={selectedFrameSrc:null,selectedFrameType:null,requiredPhotos:0,capturedPhotos:[],editedPhotos:[],frameImage:null},activePhoto=null,isDragging=isResizing=isRotating=!1,captureCountSpan.textContent="0",toggleCaptureButtons(!1),nextToSelectionBtn.disabled=!0,thumbnailsContainer.innerHTML="",showScreen("frame-selection")}); /* [cite: 174, 175, 176, 177] */
-        showScreen("frame-selection"); /* [cite: 178] */
+        function setupPhotoSelection(){photoGridContainer.innerHTML="",requiredPhotosCountSpan.textContent=state.requiredPhotos,state.capturedPhotos.forEach((e,t)=>{const a=document.createElement("div");a.className="photo-item";const o=document.createElement("img");o.src=e,o.dataset.index=t,a.appendChild(o),photoGridContainer.appendChild(a)}),showScreen("photo-selection")} 
+        photoGridContainer.addEventListener("click",e=>{"IMG"===e.target.tagName&&(!e.target.classList.contains("selected")&&photoGridContainer.querySelectorAll("img.selected").length>=state.requiredPhotos?alert(`사진은 ${state.requiredPhotos}장까지만 선택할 수 있습니다.`):e.target.classList.toggle("selected"))}); 
+        nextToEditorBtn.addEventListener("click",()=>{const e=photoGridContainer.querySelectorAll("img.selected");if(e.length!==state.requiredPhotos)return void alert(`정확히 ${state.requiredPhotos}장의 사진을 선택해야 합니다.`);const t=Array.from(e).map(e=>state.capturedPhotos[e.dataset.index]);initEditor(t)}); 
+        function initEditor(e){const t=new Image;state.frameImage=t,t.src=state.selectedFrameSrc,t.onload=()=>{canvas.width=t.width,canvas.height=t.height;const a=e.map(e=>new Promise(t=>{const a=new Image;a.src=e,a.onload=()=>t(a)}));Promise.all(a).then(e=>{state.editedPhotos=e.map((e,t)=>{const a=frameSlots[state.selectedFrameType][t],o=a[0]*canvas.width,n=a[1]*canvas.height,i=a[2]*canvas.width,c=a[3]*canvas.height,r=a[4];let d=0,s=0;i>c?(d=i,s=i*(e.height/e.width),s<c&&(s=c,d=c*(e.width/e.height))):(s=c,d=c*(e.width/e.height),d<i&&(d=i,s=i*(e.height/e.width)));let l=0;if("frame_01_slots"===state.selectedFrameType)switch(t){case 0:l=-10*(Math.PI/180);break;case 2:l=5*(Math.PI/180);break;case 3:l=3*(Math.PI/180);break;case 5:l=-8*(Math.PI/180)}return{img:e,x:o+(i-d)/2,y:n+(c-s)/2,width:d,height:s,rotation:l,originalSlot:{x:o,y:n,width:i,height:c,type:r}}}),drawCanvas(),showScreen("editor-screen")})},t.complete&&t.onload()} 
+        function drawCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height),state.editedPhotos.forEach(e=>{ctx.save();const t=e.originalSlot;"circle"===t.type?(ctx.beginPath(),ctx.arc(t.x+t.width/2,t.y+t.height/2,Math.min(t.width,t.height)/2,0,2*Math.PI),ctx.closePath(),ctx.clip()):(ctx.beginPath(),ctx.rect(t.x,t.y,t.width,t.height),ctx.closePath(),ctx.clip()),ctx.translate(e.x+e.width/2,e.y+e.height/2),ctx.rotate(e.rotation),ctx.translate(-(e.x+e.width/2),-(e.y+e.height/2)),ctx.drawImage(e.img,e.x,e.y,e.width,e.height),ctx.restore()}),state.frameImage&&state.frameImage.complete&&ctx.drawImage(state.frameImage,0,0,canvas.width,canvas.height),activePhoto&&drawHandles(activePhoto)} 
+        function drawHandles(e){const t=e.x+e.width/2,a=e.y+e.height/2;ctx.save(),ctx.translate(t,a),ctx.rotate(e.rotation),ctx.strokeStyle="#0047a0",ctx.lineWidth=4,ctx.strokeRect(-e.width/2,-e.height/2,e.width,e.height),ctx.fillStyle="#0047a0",ctx.fillRect(e.width/2-handleSize,e.height/2-handleSize,2*handleSize,2*handleSize),ctx.fillStyle="#e74c3c",ctx.beginPath(),ctx.arc(-e.width/2,-e.height/2,handleSize,0,2*Math.PI),ctx.fill(),ctx.restore()} 
+        function getPointerPos(e){const t=canvas.getBoundingClientRect(),a=canvas.width/t.width,o=canvas.height/t.height,n=e.clientX||e.touches[0].clientX,i=e.clientY||e.touches[0].clientY;return{x:(n-t.left)*a,y:(i-t.top)*o}} 
+        function getTransformedCoords(e,t){const a=e.x-(t.x+t.width/2),o=e.y-(t.y+t.height/2),n=-t.rotation;return{x:a*Math.cos(n)-o*Math.sin(n)+t.x+t.width/2,y:a*Math.sin(n)+o*Math.cos(n)+t.y+t.height/2}} 
+        function isOverHandle(e,t,a){const o=2*handleSize;return"resize"===a?t.x>e.x+e.width-o&&t.x<e.x+e.width&&t.y>e.y+e.height-o&&t.y<e.y+e.height:"rotate"===a?t.x>e.x&&t.x<e.x+o&&t.y>e.y&&t.y<e.y+o:void 0} 
+        function handlePointerDown(e){e.preventDefault();const t=getPointerPos(e);if(activePhoto){const a=getTransformedCoords(t,activePhoto);if(isOverHandle(activePhoto,a,"resize"))return isResizing=!0,void(canvas.style.cursor="se-resize");if(isOverHandle(activePhoto,a,"rotate"))return isRotating=!0,void(canvas.style.cursor="crosshair")}activePhoto=null,isDragging=!1,isResizing=!1,isRotating=!1;for(let a=state.editedPhotos.length-1;a>=0;a--){const o=state.editedPhotos[a],n=getTransformedCoords(t,o);if(n.x>=o.x&&n.x<=o.x+o.width&&n.y>=o.y&&n.y<=o.y+o.height){activePhoto=o,isDragging=!0,dragStartX=t.x-o.x,dragStartY=t.y-o.y,canvas.style.cursor="grabbing",state.editedPhotos.splice(a,1),state.editedPhotos.push(o);break}}drawCanvas()} 
+        function handlePointerMove(e){if(!activePhoto)return;e.preventDefault();const t=getPointerPos(e);if(isDragging)activePhoto.x=t.x-dragStartX,activePhoto.y=t.y-dragStartY;else if(isResizing){const a=getTransformedCoords(t,activePhoto),o=a.x-activePhoto.x,n=o*(activePhoto.img.height/activePhoto.img.width);o>20&&(activePhoto.width=o,activePhoto.height=n)}else if(isRotating){const a=activePhoto.x+activePhoto.width/2,o=activePhoto.y+activePhoto.height/2;activePhoto.rotation=Math.atan2(t.y-o,t.x-a)}drawCanvas()} 
+        function handlePointerUp(e){isDragging=!1,isResizing=!1,isRotating=!1,canvas.style.cursor="grab"} 
+        document.addEventListener("keydown",e=>{if(!activePhoto)return;if("INPUT"===e.target.tagName||"TEXTAREA"===e.target.tagName)return;const t=1.05,a=Math.PI/180*5;let o=!0;switch(e.key.toLowerCase()){case"w":activePhoto.width*=t,activePhoto.height*=t;break;case"s":activePhoto.width/=t,activePhoto.height/=t;break;case"a":activePhoto.rotation-=a;break;case"d":activePhoto.rotation+=a;break;default:o=!1}o&&(e.preventDefault(),drawCanvas())}); 
+        canvas.addEventListener("mousedown",handlePointerDown),canvas.addEventListener("mousemove",handlePointerMove),canvas.addEventListener("mouseup",handlePointerUp),canvas.addEventListener("mouseleave",handlePointerUp),canvas.addEventListener("touchstart",handlePointerDown,{passive:!1}),canvas.addEventListener("touchmove",handlePointerMove,{passive:!1}),canvas.addEventListener("touchend",handlePointerUp),canvas.addEventListener("touchcancel",handlePointerUp); 
+        downloadBtn.addEventListener("click",()=>{activePhoto=null,drawCanvas();const e=new Date,t=""+e.getFullYear()+(e.getMonth()+1).toString().padStart(2,"0")+e.getDate().toString().padStart(2,"0")+"_"+e.getHours().toString().padStart(2,"0")+e.getMinutes().toString().padStart(2,"0")+e.getSeconds().toString().padStart(2,"0"),a=document.createElement("a");a.download=`${t}.png`,a.href=canvas.toDataURL("image/png"),document.body.appendChild(a),a.click(),document.body.removeChild(a)}); 
+        printBtn.addEventListener("click",()=>{activePhoto=null,drawCanvas();const e=canvas.toDataURL("image/png"),t=window.open("","","width=800,height=600");t.document.open(),t.document.write(`\n                <!DOCTYPE html>\n                <html>\n                <head><title>Print</title></head>\n                <body onload="window.print(); window.close()">\n                    <img src="${e}" style="max-width: 100%;">\n                </body>\n                </html>\n            `),t.document.close()}); 
+        restartBtn.addEventListener("click",()=>{stopAutoCapture(),webcamElement.srcObject&&(webcamElement.srcObject.getTracks().forEach(e=>e.stop()),webcamElement.srcObject=null),state={selectedFrameSrc:null,selectedFrameType:null,requiredPhotos:0,capturedPhotos:[],editedPhotos:[],frameImage:null},activePhoto=null,isDragging=isResizing=isRotating=!1,captureCountSpan.textContent="0",toggleCaptureButtons(!1),nextToSelectionBtn.disabled=!0,thumbnailsContainer.innerHTML="",showScreen("frame-selection")}); 
+        showScreen("frame-selection"); 
     </script>
 </body>
 </html>
