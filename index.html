@@ -28,12 +28,9 @@
         #photo-selection .photo-item img.selected{border-color:#3498db}
         #editor-screen canvas{border:2px solid #ccc;border-radius:5px;cursor:grab;max-width:100%;height:auto;touch-action:none}
         .instructions{background-color:#eaf5ff;border:1px solid #bce8f1;color:#31708f;padding:15px;border-radius:8px;margin-bottom:20px}
-        /* ⭐️ 푸터 스타일 추가 ⭐️ */
-        .footer {
-            margin-top: 40px;
-            font-size: 14px;
-            color: #888;
-        }
+        .footer{margin-top:40px;font-size:14px;color:#888}
+        /* ⭐️ 카메라 선택 드롭다운 스타일 ⭐️ */
+        #camera-select { margin-bottom: 15px; padding: 8px; border-radius: 5px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -59,6 +56,7 @@
     </div>
     <div id="capture-screen" class="screen">
         <h2>📷 사진 촬영 (<span id="capture-count">0</span>/10)</h2>
+        <select id="camera-select" title="카메라 선택"></select>
         <p class="instructions">원하는 촬영 방식을 선택하세요.</p>
         <div id="video-container">
             <video id="webcam" autoplay playsinline></video>
@@ -95,13 +93,68 @@
     <audio id="shutter-sound" src="https://www.soundjay.com/mechanical/camera-shutter-click-01.wav" preload="auto"></audio>
 
     <script>
-        const screens=document.querySelectorAll(".screen"),frameSelectionScreen=document.getElementById("frame-selection"),captureScreen=document.getElementById("capture-screen"),photoSelectionScreen=document.getElementById("photo-selection"),editorScreen=document.getElementById("editor-screen"),webcamElement=document.getElementById("webcam"),canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d"),captureCountSpan=document.getElementById("capture-count"),manualCaptureBtn=document.getElementById("manual-capture-btn"),autoCapture1sBtn=document.getElementById("auto-capture-1s-btn"),autoCapture3sBtn=document.getElementById("auto-capture-3s-btn"),autoCapture5sBtn=document.getElementById("auto-capture-5s-btn"),stopCaptureBtn=document.getElementById("stop-capture-btn"),countdownOverlay=document.getElementById("countdown-overlay"),thumbnailsContainer=document.getElementById("thumbnails"),nextToSelectionBtn=document.getElementById("next-to-selection-btn"),photoGridContainer=document.getElementById("photo-grid-container"),requiredPhotosCountSpan=document.getElementById("required-photos-count"),nextToEditorBtn=document.getElementById("next-to-editor-btn"),downloadBtn=document.getElementById("download-btn"),printBtn=document.getElementById("print-btn"),restartBtn=document.getElementById("restart-btn"),shutterSound=document.getElementById("shutter-sound");
+        const screens=document.querySelectorAll(".screen"),frameSelectionScreen=document.getElementById("frame-selection"),captureScreen=document.getElementById("capture-screen"),photoSelectionScreen=document.getElementById("photo-selection"),editorScreen=document.getElementById("editor-screen"),webcamElement=document.getElementById("webcam"),canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d"),captureCountSpan=document.getElementById("capture-count"),manualCaptureBtn=document.getElementById("manual-capture-btn"),autoCapture1sBtn=document.getElementById("auto-capture-1s-btn"),autoCapture3sBtn=document.getElementById("auto-capture-3s-btn"),autoCapture5sBtn=document.getElementById("auto-capture-5s-btn"),stopCaptureBtn=document.getElementById("stop-capture-btn"),countdownOverlay=document.getElementById("countdown-overlay"),thumbnailsContainer=document.getElementById("thumbnails"),nextToSelectionBtn=document.getElementById("next-to-selection-btn"),photoGridContainer=document.getElementById("photo-grid-container"),requiredPhotosCountSpan=document.getElementById("required-photos-count"),nextToEditorBtn=document.getElementById("next-to-editor-btn"),downloadBtn=document.getElementById("download-btn"),printBtn=document.getElementById("print-btn"),restartBtn=document.getElementById("restart-btn"),shutterSound=document.getElementById("shutter-sound"),
+        // ⭐️ 카메라 선택 select 요소 추가 ⭐️
+        cameraSelect = document.getElementById("camera-select");
         let state={selectedFrameSrc:null,selectedFrameType:null,requiredPhotos:0,capturedPhotos:[],editedPhotos:[],frameImage:null},activePhoto=null,isDragging=!1,isResizing=!1,isRotating=!1,dragStartX,dragStartY;const handleSize=16;let autoCaptureTimer=null,countdownInterval=null;
         const frameSlots={frame_01_slots:[[.0536,.2347,.4229,.341],[.0536,.5927,.4229,.341],[.5313,.0694,.4229,.341],[.5313,.4264,.4229,.341]],frame_02_slots:[[.0651,.0317,.4209,.3968],[.0651,.4476,.4209,.3968],[.514,.081,.4209,.3968],[.514,.5,.4209,.3968]],frame_03_slots:[[.1751,.1863,.261,.1261],[.1751,.3353,.261,.1261],[.1941,.4854,.261,.1261],[.196,.6398,.261,.1261],[.5567,.2528,.261,.1261],[.5577,.3991,.261,.1261],[.5225,.5475,.261,.1261],[.5078,.7043,.261,.1261]],frame_04_slots:[[.1591,.209,.3361,.3079],[.5067,.209,.3361,.3079],[.1591,.5257,.3361,.3079],[.5078,.5241,.3361,.3079]],frame_05_slots:[[.0498,.0143,.419,.1981],[.0498,.2286,.419,.1981],[.0498,.4434,.419,.1981],[.0498,.6579,.419,.1981],[.5488,.0143,.419,.1981],[.5488,.2286,.419,.1981],[.5488,.4434,.419,.1981],[.5488,.6579,.419,.1981]],frame_06_slots:[[.0629,.3656,.2821,.2021],[.3704,.3598,.2581,.1984],[.6532,.3735,.2709,.1952],[.0928,.655,.2626,.1942],[.3771,.6688,.2447,.1884],[.6539,.6519,.2634,.1979]],frame_07_slots:[[.0565,.1706,.3958,.1817],[.0565,.3728,.3958,.1817],[.0565,.5741,.3958,.1817],[.0565,.7767,.3958,.1817],[.5537,.1706,.3958,.1817],[.5537,.3728,.3958,.1817],[.5537,.5741,.3958,.1817],[.5537,.7767,.3958,.1817]],frame_08_slots:[[.0135,.1675,.4747,.3921],[.0135,.5778,.4747,.3921],[.4994,.0254,.4747,.3921],[.4994,.4365,.4747,.3921]]};
         Object.keys(frameSlots).forEach(e=>{frameSlots[e].forEach(e=>{e.length<5&&e.push("square")})});
         function showScreen(e){screens.forEach(t=>t.classList.remove("active")),document.getElementById(e).classList.add("active")}
         frameSelectionScreen.addEventListener("click",e=>{"IMG"===e.target.tagName&&(state.selectedFrameSrc=e.target.dataset.frame,state.selectedFrameType=e.target.dataset.photoSlots,state.requiredPhotos=parseInt(e.target.dataset.photos),startWebcam())});
-        async function startWebcam(){try{const e=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}});webcamElement.srcObject=e,showScreen("capture-screen")}catch(e){console.error("웹캠 접근 오류:",e),alert("웹캠에 접근할 수 없습니다. 카메라 권한을 허용해주세요.")}}
+        
+        // --- ⭐️⭐️⭐️ 카메라 선택 기능 추가된 startWebcam 함수 ⭐️⭐️⭐️ ---
+        async function startWebcam() {
+            try {
+                // 이전에 실행중인 스트림 중지 (카메라 전환 시 필요)
+                if (webcamElement.srcObject) {
+                    webcamElement.srcObject.getTracks().forEach(track => track.stop());
+                }
+
+                // 사용 가능한 비디오 장치 목록 가져오기
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+                // 드롭다운 메뉴 초기화 및 채우기
+                cameraSelect.innerHTML = '';
+                videoDevices.forEach((device, index) => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    // 장치 이름이 없으면 기본 이름 부여
+                    option.text = device.label || `카메라 ${index + 1}`;
+                    cameraSelect.appendChild(option);
+                });
+
+                // 선택된 카메라 ID 가져오기 (첫 번째 카메라를 기본값으로)
+                const selectedDeviceId = cameraSelect.value || (videoDevices.length > 0 ? videoDevices[0].deviceId : null);
+
+                if (!selectedDeviceId) {
+                    throw new Error("사용 가능한 카메라가 없습니다.");
+                }
+
+                // 선택된 카메라로 스트림 시작
+                const constraints = {
+                    video: { deviceId: { exact: selectedDeviceId } }
+                };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                webcamElement.srcObject = stream;
+                showScreen("capture-screen");
+
+            } catch (err) {
+                console.error("웹캠 접근 오류:", err);
+                alert("웹캠에 접근할 수 없습니다. 카메라 권한을 허용했는지, 다른 앱에서 사용 중이지 않은지 확인해주세요.");
+                // 오류 발생 시 프레임 선택 화면으로 돌아가기 (선택 사항)
+                showScreen("frame-selection");
+            }
+        }
+        
+        // --- ⭐️ 카메라 전환 함수 추가 ⭐️ ---
+        async function switchCamera() {
+            stopAutoCapture(); // 자동 촬영 중이었다면 중지
+            await startWebcam(); // 선택된 카메라로 다시 시작
+        }
+        // 카메라 선택 드롭다운에 이벤트 리스너 추가
+        cameraSelect.addEventListener('change', switchCamera);
+
         function capturePhoto(){if(!(state.capturedPhotos.length>=10)){shutterSound.currentTime=0,shutterSound.play();const e=document.createElement("canvas");e.width=webcamElement.videoWidth,e.height=webcamElement.videoHeight;const t=e.getContext("2d");t.drawImage(webcamElement,0,0,e.width,e.height);const a=e.toDataURL("image/jpeg");state.capturedPhotos.push(a);const o=document.createElement("img");o.src=a,thumbnailsContainer.appendChild(o),captureCountSpan.textContent=state.capturedPhotos.length,state.capturedPhotos.length>=10&&(toggleCaptureButtons(!0),nextToSelectionBtn.disabled=!1,stopAutoCapture())}}
         function runCountdown(e,t){let a=e;countdownOverlay.style.display="flex";const o=()=>{countdownOverlay.textContent=a,a<1?(clearInterval(countdownInterval),countdownOverlay.style.display="none",t()):a--};o(),countdownInterval=setInterval(o,1e3)}
         function startAutoCapture(e){if(state.capturedPhotos.length>=10)return;toggleCaptureButtons(!0),stopCaptureBtn.style.display="inline-block";const t=()=>{state.capturedPhotos.length>=10?stopAutoCapture():runCountdown(e,()=>{capturePhoto(),state.capturedPhotos.length<10&&(autoCaptureTimer=setTimeout(t,1e3))})};t()}
